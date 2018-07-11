@@ -83,10 +83,19 @@ class Player(Basic):
 			x -= time*self.attrs['speed']
 			y += time*self.attrs['speed']
 
-		y += (time**2)*10 #gravitational pull
+		#y += (time**2)*10 #gravitational pull
 
 		self.rect.center = x, y
+		self.mouse_move(time)
 		return x, y #returns the central position of the player 
+
+	def mouse_move(self, time):
+		x, y = self.rect.center 
+
+		mouse_x, mouse_y = pygame.mouse.get_pos()
+		x += (mouse_x - x)*time*self.attrs['speed']
+		y += (mouse_y - y)*time*self.attrs['speed']
+		self.rect.center = x, y
 
 
 	
