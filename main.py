@@ -1,80 +1,52 @@
-#this is the main.py 
-#the main game script 
-
+#!/usr/bin/bash/python3 
 
 import pygame 
 from pygame.locals import *
 
-import sys 
+import sys
 
-#local imports
-from util import *
+#local imports 
+import puddinlib
+import anime
 
-class Game():
+def main():
+    
+    pygame.init() #starts pygame 
+    pygame.font.init() #starts font module 
 
-	def __init__(self):
-	 	self.setup()
+    #screen setup
+    SCREEN_SIZE = (800, 600)
+    screen = pygame.display.set_mode(SCREEN_SIZE) #makes a main screen
 
-	def setup(self):
-		
-		pygame.init()
-		pygame.font.init()
+    #clock setup
+    FPS = 60
+    clock = pygame.time.Clock() #game's time 
 
-		#screen settings 
-		SCREEN_SIZE = (800, 600)
-		self.screen  = pygame.display.set_mode(SCREEN_SIZE)
-		pygame.display.set_caption("Don't eat my puddin")
+    #anime test
+    new_anime = anime.Anime(2)
+    new_anime.setup("images", "temer_shoot")
+    new_anime.resize_all((200, 200))
 
-		#clock settings 
-		self.FPS = 60
-		self.clock = pygame.time.Clock()
-		self.time_counter = 0
-
-		#game settings 
-		self.game_over = False
-
-		#player settings 
-		PLAYER_ATTRS = {'size':(50, 50), 'color':(30, 100, 200), 'pos':(120, 400), 'speed':5, }
-		self.player = Player(0, PLAYER_ATTRS)
-		self.player_move_tag = 'i' #default move tag 'idle'
+    other_anime = anime.Anime(1.5)
+    other_anime.setup("images", "temer_hurt")
+    other_anime.resize_all((100, 100))
 
 
 
-	def event_handler(self): #manages events in pygame 
-		for event in pygame.event.get():
-			if event.type == QUIT:
-				pygame.quit()
-				sys.exit(0)
+    #game settings 
+    game_over = False #game over checker 
+    while not game_over:
+        time = clock.tick() / 100 #gets time in seconds (s)
 
-	def sound_handler(self): #manages sounds
-		pass 
+        for event in pygame.event.get():
+            if event.type == QUIT: #quits the game 
+                pygame.quit()
+                sys.exit()
+        
+        screen.fill((50, 200, 100)) #fills screen with color 
+        new_anime.simple_anime(time, screen, (300, 300))
+        
+        pygame.display.update() #updates screen
 
-	def draw_handler(self): #manages the drawing 
-		self.screen.fill(pygame.color.Color('green')) 
-
-		self.player.draw(self.screen)
-
-		pygame.display.update()
-
-
-	def main(self):
-
-
-		while not self.game_over:
-
-			time = self. clock.tick(self.FPS) / 100 #time in seconds 
-			self.time_counter += time #counts the total time 
-
-			self.player.move(time, self.player_move_tag)
-
-			self.event_handler()
-
-			self.sound_handler()
-
-			self.draw_handler()
-
-
-
-if __name__ == '__main__':
-	game = Game()
-	game.main()
+if __name__ == "__main__":
+    main() 
